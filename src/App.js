@@ -13,34 +13,44 @@ function App() {
 
   const locate = (e) => {
     if (e.key === 'Enter') {
-      fetch(`https://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q=${location}`)
-        .then(resp => resp.json())
-        .then(data => {
-          setWeather(data);
-          setCount();
-        }).catch(err => {
-          document.querySelector('#warning').innerHTML = err;
-        });
+      axios(`https://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q=${location}`)
+        .then(resp => {
+          document.querySelector('#display').style = 'display:block;'
+          document.querySelector('#warning').innerHTML = '';
+          setWeather(resp.data);
+          setCount(false);
+        })
+        .catch((error) => {
+          document.querySelector('#warning').innerHTML = error.response.data.error.message;
+          document.querySelector('#warning').style = "font-size:2.5vw;text-align:center;"
+          document.querySelector('#display').style = 'display:none;'
+          setCount(true);
+        }
+        );
     }
   }
 
   useEffect(() => {
-    fetch(`https://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q=lucknow`)
-      .then(resp => resp.json())
-      .then(data => {
-        setCount(count + 1);
-        setWeather(data);
-      });
-    }, []);
+    axios(`https://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q=auto:ip`)
+      .then(resp => {
+        console.log(resp.data);
+        setWeather(resp.data);
+        setCount(false);
+      })
+  }, []);
 
 
   return (
     <div id='container'>
       <div id='detailsContainer'>
         <h1> Welcome to Weather Finder</h1>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}> <input type="text" onKeyPress={locate} placeholder="Search here" autoFocus id='input' onChange={e => setLocation(e.target.value)} /> <i className="fa-solid fa-magnifying-glass" ></i></div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}> <input type="text" onKeyPress={locate} placeholder="Search with city and state" autoFocus id='input' onChange={e => setLocation(e.target.value)} /> <i className="fa-solid fa-magnifying-glass" ></i></div>
       </div>
-      { Weather.length !== 0 ?  <WeatherComponent Weather={Weather} /> : ""}
+
+      <div id='display'>
+        {Weather.length !== 0 ? <WeatherComponent Weather={Weather} /> : <h1 style={{ textAlign: 'center' }}>Api not Working ! Please wait for some time </h1>}
+
+      </div>
       <div id='warning'></div>
     </div>
   )

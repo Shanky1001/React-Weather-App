@@ -5,13 +5,12 @@ const WeatherComponent = ({ Weather }) => {
     const dateBuilder = (d) => {
         let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    
         let day = days[d.getDay()];
         let date = d.getDate();
         let month = months[d.getMonth()];
         let year = d.getFullYear();
-    
-        return `${day} ${date} ${month} ${year}`
+        document.querySelector('#container').style = `background-image:url("https:${Weather.current.condition.icon}");`
+        return `${day} ${date} ${month} ${year}`;
       }
 
     return (
@@ -27,7 +26,7 @@ const WeatherComponent = ({ Weather }) => {
                     </div>
                     <div>
                         <i className="fa-solid fa-cloud"></i>
-                        <span>{Weather.current.cloud}</span>
+                        <span>{Weather.current.cloud} %</span>
                     </div>
                 </div>
                 <div>
