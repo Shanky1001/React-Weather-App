@@ -36,6 +36,7 @@ function App() {
         console.log(resp.data);
         setWeather(resp.data);
         setCount(false);
+        document.querySelector('body').style = "background-image:url('https://cdn.wallpapersafari.com/25/60/6qx9J7.png');background-size:cover;";
       })
   }, []);
 
